@@ -1,0 +1,17 @@
+{
+    "name": "noon/hide-default-store-code",
+    "description": "Magento 2 module for hide Default Store Code",
+    "require": {
+        "magento/magento-composer-installer": "*"
+    },
+    "type": "magento2-module",
+    "version": "1.0.0",
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Noon\\HideDefaultStoreCode\\": ""
+        }
+    }
+}
