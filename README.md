@@ -4,7 +4,7 @@ Magento 2 plugin for hide *Default Store Code* from URL.
 
 <https://bender.kr.ua/howto-hide-default-store-code-from-url-magento-2/>
 
-![howto-hide-default-store-code-from-url-magento-2](https://bender.kr.ua//content/images/2019/08/howto-hide-default-store-code-from-url-magento-2-1-1.png)
+![howto-hide-default-store-code-from-url-magento-2](https://bender.kr.ua/img/howto-hide-default-store-code-from-url-magento-2-1-1.png)
 
 ***
 
