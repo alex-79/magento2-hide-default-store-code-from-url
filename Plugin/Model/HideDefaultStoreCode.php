@@ -37,8 +37,8 @@ class HideDefaultStoreCode
      */
     public function afterGetBaseUrl(\Magento\Store\Model\Store $subject, $url)
     {
-        if ($this->helper->isHideDefaultStoreCode()) {
-            $url = str_replace('/'.$this->storeManager->getDefaultStoreView()->getCode().'/','/', $url);
+        if ($this->helper->isHideDefaultStoreCode() && !is_null($this->storeManager->getDefaultStoreView())) {
+            $url = str_replace('/'.$this->storeManager->getDefaultStoreView()->getCode().'/', '/', $url);
         }
         return $url;
     }
