@@ -6,18 +6,18 @@ class HideDefaultStoreCode
 {
     /**
      *
-     * @var \Noon\HideDefaultStoreCode\Helper\Data 
+     * @var \Noon\HideDefaultStoreCode\Helper\Data
      */
     protected $helper;
-    
+
     /**
      *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
-    
+
     /**
-     * 
+     *
      * @param \Noon\HideDefaultStoreCode\Helper\Data $helper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
@@ -30,16 +30,21 @@ class HideDefaultStoreCode
     }
 
     /**
-     * 
+     *
      * @param \Magento\Store\Model\Store $subject
      * @param string $url
      * @return string
      */
-    public function afterGetBaseUrl(\Magento\Store\Model\Store $subject, $url)
-    {
-        if ($this->helper->isHideDefaultStoreCode() && !is_null($this->storeManager->getDefaultStoreView())) {
-            $url = str_replace('/'.$this->storeManager->getDefaultStoreView()->getCode().'/', '/', $url);
-        }
-        return $url;
-    }
+	 public function afterGetBaseUrl(\Magento\Store\Model\Store $subject, $url)
+     {
+ 		$websiteId = $this->storeManager->getStore()->getWebsiteId();
+ 		$defaultStore = $this->storeManager->getWebsite($websiteId)->getDefaultStore();
+         if (
+ 			$this->helper->isHideDefaultStoreCode()
+ 			&& !is_null($defaultStore)
+ 		) {
+             $url = str_replace('/'.$defaultStore->getCode().'/', '/', $url);
+         }
+         return $url;
+     }
 }
