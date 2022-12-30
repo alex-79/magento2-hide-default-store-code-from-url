@@ -21,9 +21,11 @@ php bin/magento setup:upgrade
 
 ### composer
 
-```
-composer config repositories.noon-hide-default-store-code git https://github.com/alex-79/magento2-hide-default-store-code-from-url.git
-composer require noon/hide-default-store-code:dev-master
+1. Run the command in Magento2 root directory:
+
+```bash
+composer require noon/hide-default-store-code
+php bin/magento setup:upgrade
 ```
 
 ## Configuration
