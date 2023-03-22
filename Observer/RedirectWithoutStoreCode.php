@@ -5,11 +5,6 @@ namespace Noon\HideDefaultStoreCode\Observer;
 class RedirectWithoutStoreCode implements \Magento\Framework\Event\ObserverInterface
 {
     /**
-     * @var \Magento\Framework\App\Response\RedirectInterface
-     */
-    protected $redirect;
-
-    /**
      * @var \Magento\Framework\App\ActionFlag
      */
     protected $actionFlag;
@@ -31,20 +26,17 @@ class RedirectWithoutStoreCode implements \Magento\Framework\Event\ObserverInter
 
     /**
      *
-     * @param \Magento\Framework\App\Response\RedirectInterface $redirect
      * @param \Magento\Framework\App\ActionFlag $actionFlag
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Noon\HideDefaultStoreCode\Helper\Data $helper
      * @param \Magento\Framework\UrlInterface $url
      */
     public function __construct(
-        \Magento\Framework\App\Response\RedirectInterface $redirect,
         \Magento\Framework\App\ActionFlag $actionFlag,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Noon\HideDefaultStoreCode\Helper\Data $helper,
         \Magento\Framework\UrlInterface $url
     ) {
-        $this->redirect = $redirect;
         $this->actionFlag = $actionFlag;
         $this->storeManager = $storeManager;
         $this->helper = $helper;
@@ -65,11 +57,15 @@ class RedirectWithoutStoreCode implements \Magento\Framework\Event\ObserverInter
             $url = $this->url->getCurrentUrl();
             $pos = strpos($url, $this->storeManager->getStore()->getBaseUrl() . $defaultStore->getCode());
 
-            if ($this->helper->isHideDefaultStoreCode() && $pos !== false) {
+            if (
+                $this->helper->isHideDefaultStoreCode() &&
+                $pos !== false &&
+                $code = $this->helper->getRedirectCode()
+            ) {
                 $controller = $observer->getData('controller_action');
                 $url = str_replace('/' . $defaultStore->getCode() . '/', '/', $url);
                 $this->actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
-                $this->redirect->redirect($controller->getResponse(), $url);
+                $controller->getResponse()->setRedirect($url, $code);
             }
         }
     }

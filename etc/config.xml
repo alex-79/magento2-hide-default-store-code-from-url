@@ -4,6 +4,7 @@
         <web>
             <url>
                 <hide_default_store_code>0</hide_default_store_code>
+                <redirect_to_url_without_store_code>301</redirect_to_url_without_store_code>
             </url>
         </web>
     </default>

@@ -7,6 +7,14 @@
                     <label>Hide Default Store Code</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="redirect_to_url_without_store_code" translate="label comment" type="select" sortOrder="101" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Auto-redirect to URL without Store Code</label>
+                    <source_model>Magento\Config\Model\Config\Source\Web\Redirect</source_model>
+                    <comment>I.e. redirect from http://example.com/store/ to http://example.com/</comment>
+                    <depends>
+                        <field id="web/url/hide_default_store_code">1</field>
+                    </depends>
+                </field>
             </group>
         </section>
     </system>
