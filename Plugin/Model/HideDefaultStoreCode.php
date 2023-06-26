@@ -6,9 +6,9 @@ class HideDefaultStoreCode
 {
     /**
      *
-     * @var \Noon\HideDefaultStoreCode\Helper\Data
+     * @var \Noon\HideDefaultStoreCode\Service\Config
      */
-    protected $helper;
+    protected $config;
 
     /**
      *
@@ -18,14 +18,14 @@ class HideDefaultStoreCode
 
     /**
      *
-     * @param \Noon\HideDefaultStoreCode\Helper\Data $helper
+     * @param \Noon\HideDefaultStoreCode\Service\Config $config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Noon\HideDefaultStoreCode\Helper\Data $helper,
+        \Noon\HideDefaultStoreCode\Service\Config $config,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
-        $this->helper = $helper;
+        $this->config = $config;
         $this->storeManager = $storeManager;
     }
 
@@ -39,7 +39,7 @@ class HideDefaultStoreCode
     {
         $websiteId = $this->storeManager->getStore()->getWebsiteId();
         $defaultStore = $this->storeManager->getWebsite($websiteId)->getDefaultStore();
-        if ($this->helper->isHideDefaultStoreCode() && !is_null($defaultStore)) {
+        if ($this->config->isHideDefaultStoreCode() && !is_null($defaultStore)) {
             $url = str_replace('/' . $defaultStore->getCode() . '/', '/', $url);
         }
         return $url;

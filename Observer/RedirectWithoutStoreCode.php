@@ -15,9 +15,9 @@ class RedirectWithoutStoreCode implements \Magento\Framework\Event\ObserverInter
     protected $storeManager;
 
     /**
-     * @var \Noon\HideDefaultStoreCode\Helper\Data
+     * @var \Noon\HideDefaultStoreCode\Service\Config
      */
-    protected $helper;
+    protected $config;
 
     /**
      * @var \Magento\Framework\UrlInterface
@@ -25,21 +25,20 @@ class RedirectWithoutStoreCode implements \Magento\Framework\Event\ObserverInter
     protected $url;
 
     /**
-     *
      * @param \Magento\Framework\App\ActionFlag $actionFlag
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Noon\HideDefaultStoreCode\Helper\Data $helper
+     * @param \Noon\HideDefaultStoreCode\Service\Config $config
      * @param \Magento\Framework\UrlInterface $url
      */
     public function __construct(
         \Magento\Framework\App\ActionFlag $actionFlag,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Noon\HideDefaultStoreCode\Helper\Data $helper,
+        \Noon\HideDefaultStoreCode\Service\Config $config,
         \Magento\Framework\UrlInterface $url
     ) {
         $this->actionFlag = $actionFlag;
         $this->storeManager = $storeManager;
-        $this->helper = $helper;
+        $this->config = $config;
         $this->url = $url;
     }
 
@@ -58,9 +57,9 @@ class RedirectWithoutStoreCode implements \Magento\Framework\Event\ObserverInter
             $pos = strpos($url, $this->storeManager->getStore()->getBaseUrl() . $defaultStore->getCode());
 
             if (
-                $this->helper->isHideDefaultStoreCode() &&
+                $this->config->isHideDefaultStoreCode() &&
                 $pos !== false &&
-                $code = $this->helper->getRedirectCode()
+                $code = $this->config->getRedirectCode()
             ) {
                 $controller = $observer->getData('controller_action');
                 $url = str_replace('/' . $defaultStore->getCode() . '/', '/', $url);
