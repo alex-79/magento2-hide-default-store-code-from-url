@@ -37,3 +37,7 @@ php bin/magento setup:upgrade
 ### REDIRECT
 
 *Stores > Configuration > General > Web > Url Options > Auto-redirect to URL without Store Code*
+
+***
+
+<a href="https://www.buymeacoffee.com/alex79" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
