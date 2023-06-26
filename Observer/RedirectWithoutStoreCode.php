@@ -49,23 +49,36 @@ class RedirectWithoutStoreCode implements \Magento\Framework\Event\ObserverInter
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        $websiteId = $this->storeManager->getStore()->getWebsiteId();
-        $defaultStore = $this->storeManager->getWebsite($websiteId)->getDefaultStore();
+        if ($this->config->isHideDefaultStoreCode() && $code = $this->config->getRedirectCode()) {
+            $websiteId = $this->storeManager->getStore()->getWebsiteId();
+            $defaultStore = $this->storeManager->getWebsite($websiteId)->getDefaultStore();
 
-        if (!is_null($defaultStore)) {
-            $url = $this->url->getCurrentUrl();
-            $pos = strpos($url, $this->storeManager->getStore()->getBaseUrl() . $defaultStore->getCode());
-
-            if (
-                $this->config->isHideDefaultStoreCode() &&
-                $pos !== false &&
-                $code = $this->config->getRedirectCode()
-            ) {
-                $controller = $observer->getData('controller_action');
-                $url = str_replace('/' . $defaultStore->getCode() . '/', '/', $url);
-                $this->actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
-                $controller->getResponse()->setRedirect($url, $code);
+            if (!is_null($defaultStore)) {
+                $url = $this->url->getCurrentUrl();
+                if ($this->isUrlWithDefaultCode($url, $defaultStore->getCode())) {
+                    $controller = $observer->getData('controller_action');
+                    $url = str_replace('/' . $defaultStore->getCode() . '/', '/', $url);
+                    $this->actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
+                    $controller->getResponse()->setRedirect($url, $code);
+                }
             }
         }
+    }
+
+    /**
+     * @param string $url
+     * @param string $defaultCode
+     * @return bool
+     */
+    private function isUrlWithDefaultCode($url, $defaultCode)
+    {
+        $urlParts = parse_url($url);
+        if (isset($urlParts['path'])) {
+            $pathParts = explode('/', ltrim($urlParts['path'], '/'), 2);
+            if (isset($pathParts[0]) && $pathParts[0] == $defaultCode) {
+                return true;
+            }
+        }
+        return false;
     }
 }
