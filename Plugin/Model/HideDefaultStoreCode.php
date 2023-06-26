@@ -8,40 +8,29 @@ class HideDefaultStoreCode
      *
      * @var \Noon\HideDefaultStoreCode\Service\Config
      */
-    protected $config;
+    private $config;
 
     /**
-     *
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     *
      * @param \Noon\HideDefaultStoreCode\Service\Config $config
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Noon\HideDefaultStoreCode\Service\Config $config,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Noon\HideDefaultStoreCode\Service\Config $config
     ) {
         $this->config = $config;
-        $this->storeManager = $storeManager;
     }
 
     /**
      *
      * @param \Magento\Store\Model\Store $subject
-     * @param string $url
-     * @return string
+     * @param bool $result
+     * @return bool
      */
-    public function afterGetBaseUrl(\Magento\Store\Model\Store $subject, $url)
+    public function afterIsUseStoreInUrl(\Magento\Store\Model\Store $subject, bool $result)
     {
-        $websiteId = $this->storeManager->getStore()->getWebsiteId();
-        $defaultStore = $this->storeManager->getWebsite($websiteId)->getDefaultStore();
-        if ($this->config->isHideDefaultStoreCode() && !is_null($defaultStore)) {
-            $url = str_replace('/' . $defaultStore->getCode() . '/', '/', $url);
+        if ($this->config->isHideDefaultStoreCode() && $subject->getCode() !== \Magento\Store\Model\Store::ADMIN_CODE && $subject->isDefault()) {
+            return false;
         }
-        return $url;
+
+        return $result;
     }
 }
